@@ -1,0 +1,38 @@
+﻿@using Book_Dal
+
+@model IEnumerable<Book>
+@{
+    ViewData["Title"] = "Books List";
+}
+
+<h1>Books List</h1>
+
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Book</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Year Published</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.YearPublished</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = book.Id })" class="btn btn-info">Details</a>
+                    <a href="@Url.Action("Edit", new { id = book.Id })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = book.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,31 @@
+﻿@using Book_Dal
+
+@model Book
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<h1>Edit Book</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" class="form-control" id="Title" asp-for="Title" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Author">Author</label>
+        <input type="text" class="form-control" id="Author" asp-for="Author" required />
+    </div>
+
+    <div class="form-group">
+        <label for="YearPublished">Year Published</label>
+        <input type="number" class="form-control" id="YearPublished" asp-for="YearPublished" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
