@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Book_Dal\Book_Dal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\imagepath\profile\" />
+  </ItemGroup>
+
 </Project>

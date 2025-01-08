@@ -1,6 +1,7 @@
 ﻿using Book_BLL;
 using Book_Dal;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace bookapp.Controllers
 {
@@ -29,14 +30,40 @@ namespace bookapp.Controllers
         // POST: Authors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Bio,ImagePath")] Author author)
+        public async Task<IActionResult> Create(CreateVmAuthor model, IFormFile image)
         {
             if (ModelState.IsValid)
             {
+                var author = new Author
+                {
+                    Name = model.Name,
+                    
+                    Bio = model.Bio,
+                    
+
+                };
+
+                // images
+               
+                {
+                    if (image != null && image.Length > 0)
+                    {
+                        var fileName = Path.GetFileName(image.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagepath/profile", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+
+                        // تخزين مسار الصورة في الـ author
+                        author.ImagePath = "/imagepath/profile/" + fileName;
+                    }
+                }
                 await _authorService.CreateAuthorAsync(author);
                 return RedirectToAction(nameof(Index));
             }
-            return View(author);
+            return View(model);
         }
 
         // GET: Authors/Edit/5
