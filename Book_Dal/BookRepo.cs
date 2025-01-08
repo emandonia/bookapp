@@ -18,13 +18,15 @@ namespace Book_Dal
 
 		public async Task<List<Book>> GetAllBooksAsync()
 		{
-			return await _context.Books.ToListAsync();
-		}
+            //return await _context.Books.ToListAsync();
+            return await _context.Books.Include(b => b.Author).ToListAsync();
+        }
 
 		public async Task<Book> GetBookByIdAsync(int id)
 		{
-			return await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
-		}
+            //return await _context.Books.FirstOrDefaultAsync(b => b.Id == id);
+            return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(b => b.Id == id);
+        }
 
 		public async Task AddBookAsync(Book book)
 		{

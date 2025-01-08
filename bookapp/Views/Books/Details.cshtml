@@ -1,29 +1,32 @@
 ﻿@using Book_Dal
 
+
+
 @model Book
+
 @{
-    ViewData["Title"] = "Create New Book";
+    ViewData["Title"] = "Book Details";
 }
 
-<h1>Create New Book</h1>
+<h1>@ViewData["Title"]</h1>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="Title">Title</label>
-        <input type="text" class="form-control" id="Title" name="Title" required />
-    </div>
+<div>
+    <h2>@Model.Title</h2>
+   
+    <p><strong>Published Date:</strong> @Model.YearPublished.ToString("MMMM dd, yyyy")</p>
+    
+    <!-- Assuming you have an Author property on the Book model -->
+    <p><strong>Author:</strong> @Model.Author.Name</p>
 
-    <div class="form-group">
-        <label for="Author">Author</label>
-        <input type="text" class="form-control" id="Author" name="Author" required />
-    </div>
+    <!-- If you have more properties, add them here -->
+    <p><strong>Author Bio:</strong> @Model.Author.Bio</p>
 
-    <div class="form-group">
-        <label for="YearPublished">Year Published</label>
-        <input type="number" class="form-control" id="YearPublished" name="YearPublished" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
-
-<a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+    <!-- If there's an image, display it -->
+    @if (!string.IsNullOrEmpty(Model.Author.ImagePath))
+    {
+        <div class="form-group">
+            <label>Author Image</label>
+            <img src="@Url.Content("~/uploads/" + Model.Author.ImagePath)" alt="Author Image" width="150" />
+        </div>
+    }
+</div>

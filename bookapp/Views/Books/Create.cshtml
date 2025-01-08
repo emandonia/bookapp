@@ -14,9 +14,14 @@
         <input type="text" class="form-control" id="Title" name="Title" required />
     </div>
 
+    @* <div class="form-group">
+        <label for="AuthorName">AuthorName</label>
+        <input type="text" class="form-control" id="AuthorName" name="AuthorName" required />
+    </div> *@
     <div class="form-group">
-        <label for="Author">Author</label>
-        <input type="text" class="form-control" id="Author" name="Author" required />
+        <label asp-for="AuthorId">Author</label>
+        <select asp-for="AuthorId" class="form-control" asp-items="@(new SelectList(ViewBag.Authors, "AuthorId", "Name"))"></select>
+        <span asp-validation-for="AuthorId" class="text-danger"></span>
     </div>
 
     <div class="form-group">

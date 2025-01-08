@@ -1,17 +1,21 @@
 ﻿using Book_BLL;
 using Book_Dal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace bookapp.Controllers
 {
 	public class BooksController : Controller
 	{
 		private readonly BookService _bookService;
+        private readonly AuthorService _authorService;
 
-		public BooksController(BookService bookService)
+        public BooksController(BookService bookService, AuthorService authorService)
 		{
 			_bookService = bookService;
-		}
+            _authorService = authorService;
+
+        }
 
 		// GET: Books
 		public async Task<IActionResult> Index()
@@ -31,29 +35,32 @@ namespace bookapp.Controllers
 			var book = await _bookService.GetBookByIdAsync(id.Value);
 			if (book == null)
 			{
-				return NotFound();
-			}
+				return NotFound();// If no book is found with that ID
+            }
 
-			return View(book);
-		}
+			return View(book); //Pass the book object to the view
 
-		// GET: Books/Create
-		public IActionResult Create()
-		{
-			return View();
-		}
+        }
 
-		// POST: Books/Create
-		[HttpPost]
+        // GET: Books/Create
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Authors = new SelectList(await _authorService.GetAllAuthorsAsync(), "AuthorId", "Name");
+            return View();
+        }
+
+        // POST: Books/Create
+        [HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Title, Author, YearPublished")] Book book)
+		public async Task<IActionResult> Create([Bind("Title, AuthorId, YearPublished")] Book book)
 		{
 			if (ModelState.IsValid)
 			{
 				await _bookService.AddBookAsync(book);
 				return RedirectToAction(nameof(Index));
 			}
-			return View(book);
+            ViewBag.Authors = new SelectList(await _authorService.GetAllAuthorsAsync(), "AuthorId", "Name", book.AuthorId);
+            return View(book);
 		}
 
 		// GET: Books/Edit/5
@@ -69,7 +76,8 @@ namespace bookapp.Controllers
 			{
 				return NotFound();
 			}
-			return View(book);
+            ViewBag.Authors = new SelectList(await _authorService.GetAllAuthorsAsync(), "AuthorId", "Name", book.AuthorId);
+            return View(book);
 		}
 
 		// POST: Books/Edit/5
