@@ -83,7 +83,7 @@ namespace bookapp.Controllers
 		// POST: Books/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id, Title, Author, YearPublished")] Book book)
+		public async Task<IActionResult> Edit(int id, [Bind("Id, Title, AuthorId, YearPublished")] Book book)
 		{
 			if (id != book.Id)
 			{
@@ -115,7 +115,7 @@ namespace bookapp.Controllers
 		}
 
 		// POST: Books/Delete/5
-		[HttpPost, ActionName("Delete")]
+		[HttpPost, ActionName("DeleteConfirmed")]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{

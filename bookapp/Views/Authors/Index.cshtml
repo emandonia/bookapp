@@ -16,6 +16,7 @@
         <tr>
             <th>Name</th>
             <th>Bio</th>
+            <th>ImagePath</th>
             <th>Action</th>
         </tr>
     </thead>
@@ -25,6 +26,9 @@
             <tr>
                 <td>@author.Name</td>
                 <td>@author.Bio</td>
+                <td>
+                    <img src="@Url.Content(author.ImagePath)" alt="Author Image" style="width: 100px; height: 100px;" />
+                </td>
                 <td>
                     <a href="@Url.Action("Edit", "Authors", new { id = author.AuthorId })" class="btn btn-warning">Edit</a>
                     <a href="@Url.Action("Delete", "Authors", new { id = author.AuthorId })" class="btn btn-danger">Delete</a>

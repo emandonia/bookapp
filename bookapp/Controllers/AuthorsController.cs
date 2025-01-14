@@ -30,8 +30,9 @@ namespace bookapp.Controllers
         // POST: Authors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateVmAuthor model, IFormFile image)
+        public async Task<IActionResult> Create(CreateVmAuthor model)
         {
+            var image = model.ImageFiles;
             if (ModelState.IsValid)
             {
                 var author = new Author
@@ -70,29 +71,76 @@ namespace bookapp.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var author = await _authorService.GetAuthorByIdAsync(id);
+
             if (author == null)
             {
                 return NotFound();
             }
+            var model = new EditVmAuthor
+            {
+               
+                Name = author.Name,
+                Bio = author.Bio,
+                CurrentImagePath = author.ImagePath
+            };
+           
+
+            
             return View(author);
         }
 
         // POST: Authors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AuthorId,Name,Bio,ImagePath")] Author author)
+        public async Task<IActionResult> Edit(int id, EditVmAuthor model)
         {
-            if (id != author.AuthorId)
-            {
-                return NotFound();
-            }
 
+            var image = model.ImageFiles;
             if (ModelState.IsValid)
             {
+                var author = new Author
+                {
+                    AuthorId = id,
+                    Name = model.Name,
+
+                    Bio = model.Bio,
+
+
+                };
+
+                // images
+
+                {
+                    if (image != null && image.Length > 0)
+                    {
+                        var fileName = Path.GetFileName(image.FileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagepath/profile", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+
+                        // تخزين مسار الصورة في الـ author
+                        author.ImagePath = "/imagepath/profile/" + fileName;
+                    }
+                }
                 await _authorService.UpdateAuthorAsync(author);
                 return RedirectToAction(nameof(Index));
+            
+                //    if (id != author.AuthorId)
+                //{
+                //    return NotFound();
+                //}
+
+                //if (ModelState.IsValid)
+                //{
+                //    await _authorService.UpdateAuthorAsync(author);
+                //    return RedirectToAction(nameof(Index));
+                //}
+                return View(author);
             }
-            return View(author);
+            return View(model);
         }
 
         // GET: Authors/Delete/5

@@ -1,5 +1,6 @@
-﻿@using Book_Dal
-@model Author
+﻿@using Book_BLL
+@using Book_Dal
+@model EditVmAuthor
 
 @{
     ViewData["Title"] = "Edit Author";
@@ -20,17 +21,17 @@
         <span asp-validation-for="Bio" class="text-danger"></span>
     </div>
 
-    @if (!string.IsNullOrEmpty(Model.ImagePath))
+    @if (!string.IsNullOrEmpty(Model.CurrentImagePath))
 
     {
         <div class="form-group">
             <label>Current Image</label>
-            <img src="@Url.Content("~/uploads/" + Model.ImagePath)" alt="Author Image" width="150" />
+            <img src="@Url.Content( Model.CurrentImagePath)" alt="Author Image" width="150" />
         </div>
     }
 
     <div class="form-group">
-        <label asp-for="ImagePath">New Image</label>
+        <label asp-for="ImageFiles">New Image</label>
         <input type="file" name="ImagePath" class="form-control" />
     </div>
 

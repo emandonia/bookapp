@@ -19,10 +19,17 @@
         <input type="text" class="form-control" id="AuthorName" name="AuthorName" required />
     </div> *@
     <div class="form-group">
-        <label asp-for="AuthorId">Author</label>
-        <select asp-for="AuthorId" class="form-control" asp-items="@(new SelectList(ViewBag.Authors, "AuthorId", "Name"))"></select>
-        <span asp-validation-for="AuthorId" class="text-danger"></span>
+        <label for="authorId">Select Author</label>
+        <select id="authorId" name="AuthorId" class="form-control">
+            @foreach (var author in ViewBag.Authors as SelectList)
+            {
+                <option value="@author.Value">@author.Text</option>
+            }
+        </select>
     </div>
+
+    
+
 
     <div class="form-group">
         <label for="YearPublished">Year Published</label>

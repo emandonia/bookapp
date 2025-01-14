@@ -26,8 +26,9 @@
             <tr>
                 <td>@book.Title</td>
                 @* <td>@book.Author</td> *@
-                <td>@book.YearPublished</td>
                 <td>@book.Author.Name</td>
+                <td>@book.YearPublished</td>
+                
                 <td>
                     <a href="@Url.Action("Details", new { id = book.Id })" class="btn btn-info">Details</a>
                     <a href="@Url.Action("Edit", new { id = book.Id })" class="btn btn-warning">Edit</a>
