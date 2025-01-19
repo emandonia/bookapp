@@ -1,0 +1,53 @@
+﻿@using Book_Dal
+@model IEnumerable<Reservation>
+
+@{
+    ViewData["Title"] = "Reservations List";
+}
+
+<h1>Reservations List</h1>
+
+<!-- Link to Create Reservation -->
+<div>
+    <a href="@Url.Action("Create")" class="btn btn-success">Create New Reservation</a>
+</div>
+
+<!-- Reservations Table -->
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Reserved By</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reservation in Model)
+
+        {
+            <tr>
+                <td>@reservation.Book?.Title</td>
+                <td>@reservation.ReservedBy</td>
+                <td>@reservation.StartDate.ToShortDateString()</td>
+                <td>@reservation.EndDate.ToShortDateString()</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(reservation.UserImagepath))
+                    {
+                        <img src="@reservation.UserImagepath" alt="User Image" style="width: 50px; height: 50px;" />
+                    }
+                </td>
+                <td>
+                    <!-- You can add action buttons like Edit or Delete here -->
+                    <a href="@Url.Action("Edit",  new { id = reservation.Id })" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = reservation.Id })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Back to Home or Dashboard -->
+<a href="@Url.Action("Index", "Home")" class="btn btn-secondary">Back to Home</a>

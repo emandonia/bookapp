@@ -1,0 +1,36 @@
+﻿@using Book_Dal
+@model Reservation
+
+@{
+    ViewData["Title"] = "Delete Reservation";
+}
+
+<h1>Delete Reservation</h1>
+
+<p>Are you sure you want to delete the following reservation?</p>
+
+<div class="alert alert-warning">
+    <strong>Book:</strong> @Model.Book?.Title <br />
+    <strong>Reserved By:</strong> @Model.ReservedBy <br />
+    <strong>Start Date:</strong> @Model.StartDate.ToShortDateString() <br />
+    <strong>End Date:</strong> @Model.EndDate.ToShortDateString() <br />
+    @if (!string.IsNullOrEmpty(Model.UserImagepath))
+    {
+        <strong>Image:</strong>
+
+        <br />
+        <img src="@Model.UserImagepath" alt="User Image" style="width: 100px; height: 100px;" />
+    }
+</div>
+
+<form method="post" asp-action="DeleteConfirmed">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

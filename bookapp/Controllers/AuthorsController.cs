@@ -78,15 +78,15 @@ namespace bookapp.Controllers
             }
             var model = new EditVmAuthor
             {
-               
+               AuthorId=author.AuthorId,
                 Name = author.Name,
                 Bio = author.Bio,
                 CurrentImagePath = author.ImagePath
             };
-           
 
-            
-            return View(author);
+
+
+            return View(model);
         }
 
         // POST: Authors/Edit/5
@@ -103,48 +103,51 @@ namespace bookapp.Controllers
                     AuthorId = id,
                     Name = model.Name,
 
-                    Bio = model.Bio,
+                Bio = model.Bio,
 
 
-                };
+            };
 
-                // images
+            // images
 
+            {
+                if (image != null && image.Length > 0)
                 {
-                    if (image != null && image.Length > 0)
+                    var fileName = Path.GetFileName(image.FileName);
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagepath/profile", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        var fileName = Path.GetFileName(image.FileName);
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagepath/profile", fileName);
+                        await image.CopyToAsync(stream);
+}
 
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await image.CopyToAsync(stream);
-                        }
-
-                        // تخزين مسار الصورة في الـ author
+// تخزين مسار الصورة في الـ author
                         author.ImagePath = "/imagepath/profile/" + fileName;
+
                     }
                 }
-                await _authorService.UpdateAuthorAsync(author);
-                return RedirectToAction(nameof(Index));
-            
-                //    if (id != author.AuthorId)
-                //{
-                //    return NotFound();
-                //}
+            await _authorService.UpdateAuthorAsync(author);
+return RedirectToAction(nameof(Index));
 
-                //if (ModelState.IsValid)
-                //{
-                //    await _authorService.UpdateAuthorAsync(author);
-                //    return RedirectToAction(nameof(Index));
-                //}
-                return View(author);
-            }
-            return View(model);
+//    if (id != author.AuthorId)
+//{
+//    return NotFound();
+//}
+
+//if (ModelState.IsValid)
+//{
+//    await _authorService.UpdateAuthorAsync(author);
+//    return RedirectToAction(nameof(Index));
+//}
+return View(author);
         }
+        return View(model);
 
-        // GET: Authors/Delete/5
-        public async Task<IActionResult> Delete(int id)
+
+    }
+
+    // GET: Authors/Delete/5
+    public async Task<IActionResult> Delete(int id)
         {
             var author = await _authorService.GetAuthorByIdAsync(id);
             if (author == null)

@@ -11,6 +11,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IbookRepo, BookRepo>();
 builder.Services.AddScoped<IAutorRepo, AutorRepo>();
+builder.Services.AddScoped<IReservationRepo, ReservationRepo>();
+
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<AuthorService>();
 

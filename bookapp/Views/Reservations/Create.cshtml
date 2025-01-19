@@ -1,0 +1,138 @@
+﻿@using Book_BLL
+@model CreateVMReservation
+
+@{
+    ViewData["Title"] = "Create Reservation";
+}
+
+<h1>Create Reservation</h1>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>There were some problems with your submission:</strong>
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form method="post" enctype="multipart/form-data">
+    <!-- Book Dropdown -->
+   
+    <div class="form-group">
+        <label for="BookId">Select book</label>
+        <select id="BookId" name="BookId" class="form-control">
+            @foreach (var author in ViewData["Books"] as SelectList)
+            {
+                <option value="@author.Value">@author.Text</option>
+            }
+        </select>
+    </div>
+
+
+    <!-- Start Date -->
+    <div class="form-group">
+        <label for="StartDate">Start Date</label>
+        <input type="date" asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <!-- End Date -->
+    <div class="form-group">
+        <label for="EndDate">End Date</label>
+        <input type="date" asp-for="EndDate" class="form-control" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="CountryId">Country</label>
+        <select id="CountryId" name="CountryId" class="form-control">
+            <option value="">Select a Country</option>
+            @foreach (var country in Model.Countries)
+            {
+                <option value="@country.Value">@country.Text</option>
+            }
+        </select>
+    </div>
+
+    <!-- State Dropdown -->
+    <div class="form-group">
+        <label for="StateId">State</label>
+        <select id="StateId" name="StateId" class="form-control">
+            <option value="">Select a State</option>
+        </select>
+    </div>
+
+    <!-- City Dropdown -->
+    <div class="form-group">
+        <label for="CityId">City</label>
+        <select id="CityId" name="CityId" class="form-control">
+            <option value="">Select a City</option>
+        </select>
+    </div>
+
+    <!-- Start Date -->
+    <div class="form-group">
+        <label for="StartDate">Start Date</label>
+        <input type="date" asp-for="StartDate" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+
+    <!-- Reserved By -->
+    <div class="form-group">
+        <label for="ReservedBy">Reserved By</label>
+        <input type="text" asp-for="ReservedBy" class="form-control" />
+        <span asp-validation-for="ReservedBy" class="text-danger"></span>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="form-group">
+        <label for="ImageFiles">Upload Image (Optional)</label>
+        <input type="file" asp-for="ImageFiles" class="form-control" />
+        <span asp-validation-for="ImageFiles" class="text-danger"></span>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Create Reservation</button>
+    </div>
+</form>
+
+<!-- Back to Reservations List -->
+<a href="@Url.Action("Index", "Reservations")" class="btn btn-secondary">Back to Reservations</a>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Fetch states when country changes
+        $('#CountryId').change(function () {
+            var countryId = $(this).val();
+            if (countryId) {
+                $.get('/Reservations/GetStates?countryId=' + countryId, function (data) {
+                    $('#StateId').empty().append('<option value="">Select a State</option>');
+                    $.each(data, function (i, state) {
+                        $('#StateId').append('<option value="' + state.value + '">' + state.text + '</option>');
+                    });
+                });
+            }
+        });
+
+        // Fetch cities when state changes
+        $('#StateId').change(function () {
+            var stateId = $(this).val();
+            if (stateId) {
+                $.get('/Reservations/GetCities?stateId=' + stateId, function (data) {
+                    $('#CityId').empty().append('<option value="">Select a City</option>');
+                    $.each(data, function (i, city) {
+                        $('#CityId').append('<option value="' + city.value + '">' + city.text + '</option>');
+                    });
+                });
+            }
+        });
+    </script>
+}

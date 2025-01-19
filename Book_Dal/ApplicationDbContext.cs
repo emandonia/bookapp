@@ -16,5 +16,10 @@ namespace Book_Dal
 		public DbSet<Book> Books { get; set; }
 
         public DbSet<Author> Authors { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
+
     }
 }

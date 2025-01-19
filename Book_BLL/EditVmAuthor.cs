@@ -9,10 +9,10 @@ namespace Book_BLL
 {
     public class EditVmAuthor
     {
-       // public int Id { get; set; }
+        public int AuthorId { get; set; } // Ensure this property exists
         public string Name { get; set; }
         public string Bio { get; set; }
         public IFormFile? ImageFiles { get; set; }
-        public string ?CurrentImagePath { get; set; }
+        public string? CurrentImagePath { get; set; }
     }
 }
