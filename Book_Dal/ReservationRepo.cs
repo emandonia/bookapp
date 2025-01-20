@@ -58,9 +58,15 @@ namespace Book_Dal
                     ((startDate >= r.StartDate && startDate <= r.EndDate) ||
                      (endDate >= r.StartDate && endDate <= r.EndDate)));
         }
-        public List<Country> GetCountries()
+        //public async Task<IEnumerable<Country>> GetCountries()
+        //{
+        //    return _context.Countries.ToListAsync();
+
+        //}
+        public async Task<List<Country>> GetCountries()
         {
-            return _context.Countries.ToList();
+            //return await _context.Books.ToListAsync();
+            return await _context.Countries.ToListAsync();
         }
 
         public List<State> GetStatesByCountry(int countryId)

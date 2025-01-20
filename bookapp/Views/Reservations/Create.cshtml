@@ -19,7 +19,7 @@
     </div>
 }
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" asp-action="CreateConfirmed" enctype="multipart/form-data">
     <!-- Book Dropdown -->
    
     <div class="form-group">
@@ -73,12 +73,12 @@
         </select>
     </div>
 
-    <!-- Start Date -->
+   @*  <!-- Start Date -->
     <div class="form-group">
         <label for="StartDate">Start Date</label>
         <input type="date" asp-for="StartDate" class="form-control" />
         <span asp-validation-for="StartDate" class="text-danger"></span>
-    </div>
+    </div> *@
 
 
     <!-- Reserved By -->

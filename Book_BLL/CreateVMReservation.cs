@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace Book_BLL
 {
@@ -23,8 +25,8 @@ namespace Book_BLL
         public int? StateId { get; set; }
         public int? CityId { get; set; }
 
-        public List<SelectListItem> Countries { get; set; }
-        public List<SelectListItem> States { get; set; }
-        public List<SelectListItem> Cities { get; set; }
+        public List <SelectListItem> ? Countries { get; set; }
+        public List<SelectListItem> ? States { get; set; }
+        public List<SelectListItem> ? Cities { get; set; }
     }
 }

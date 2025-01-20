@@ -28,7 +28,7 @@ namespace bookapp.Controllers
 
 
         // GET: Create Reservation
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(CreateVMReservation viewModel)
         {
             // Populate the Books for the dropdown
 
@@ -39,13 +39,33 @@ namespace bookapp.Controllers
             //    Value = book.BookId.ToString(),
             //    Text = book.Book.Title
             //}).ToList();
-            return View();
+            // viewModel.Countries = new List<SelectListItem>(await _reservationRepository.GetCountries(), "CountryId", "Name", viewModel.CountryId);
+            var countries = await _reservationRepository.GetCountries();
+            if (countries == null || !countries.Any())
+            {
+                // إذا لم توجد بيانات، يمكنك إضافة عنصر فارغ للـ SelectList
+                viewModel.Countries = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "No countries available" }
+    };
+            }
+            else
+            {
+                // إذا كانت البيانات موجودة، قم بإنشاء الـ SelectListItems
+                viewModel.Countries = countries.Select(c => new SelectListItem
+                {
+                    Value = c.CountryId.ToString(),
+                    Text = c.Name,
+                    Selected = c.CountryId == viewModel.CountryId
+                }).ToList();
+            }
+            return View(viewModel);
         }
 
         // POST: Create Reservation
-        [HttpPost]
+        [HttpPost , ActionName("CreateConfirmed")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateVMReservation viewModel)
+        public async Task<IActionResult> CreateConfirmed(CreateVMReservation viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -82,6 +102,7 @@ namespace bookapp.Controllers
                          CountryId = viewModel.CountryId,
                         StateId = viewModel.StateId,
                         CityId = viewModel.CityId
+                        
                     };
 
                     await _reservationRepository.AddReservationAsync(reservation);
@@ -92,14 +113,27 @@ namespace bookapp.Controllers
             ModelState.AddModelError(string.Empty, "The book is already reserved for the selected dates.");
             // If something goes wrong, return the same view with the current data
             ViewData["Books"] = new SelectList(await _bookService.GetAllBooksAsync(), "Id", "Title", viewModel.BookId);
-            viewModel.Countries = _reservationRepository.GetCountries()  // Synchronous method, no await
-            .Select(c => new SelectListItem
+            // viewModel.Countries = new List<SelectListItem>(await _reservationRepository.GetCountries(), "CountryId", "Name", viewModel.CountryId);
+            var countries = await _reservationRepository.GetCountries();
+            if (countries == null || !countries.Any())
             {
-                Value = c.CountryId.ToString(),
-                Text = c.Name
-            })
-            .ToList();
-            return View(viewModel);
+                // إذا لم توجد بيانات، يمكنك إضافة عنصر فارغ للـ SelectList
+                viewModel.Countries = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "No countries available" }
+    };
+            }
+            else
+            {
+                // إذا كانت البيانات موجودة، قم بإنشاء الـ SelectListItems
+                viewModel.Countries = countries.Select(c => new SelectListItem
+                {
+                    Value = c.CountryId.ToString(),
+                    Text = c.Name,
+                    Selected = c.CountryId == viewModel.CountryId
+                }).ToList();
+            }
+            return View("Create", viewModel);
         }
         // GET: Delete Reservation
         public async Task<IActionResult> Delete(int id)

@@ -13,7 +13,8 @@ namespace Book_Dal
         Task AddReservationAsync(Reservation reservation);
         Task DeleteReservationAsync(int id);
         Task<bool> IsBookReservedAsync(int ?bookId, DateTime startDate, DateTime endDate);
-        public List<Country> GetCountries();
+        //  public List<Country> GetCountries();
+        Task<List<Country>> GetCountries();
         public List<State> GetStatesByCountry(int countryId);
         public List<City> GetCitiesByState(int stateId);
     }
